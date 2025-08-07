@@ -1,5 +1,7 @@
 package com.example.e_donasi.navigation
 
+import android.util.Log
+
 
 sealed class Screen(val route: String) {
 
@@ -18,12 +20,23 @@ sealed class Screen(val route: String) {
 
     object Profile : Screen(route = "profile")
 
+    object DetailDonasi : Screen(route = "detail_donasi/{donasiId}") {
+        fun createRoute(donasiId: String): String {
+            Log.d("KLIKNAV", donasiId)
+            return "detail_donasi/$donasiId"
+        }
+    }
+
+    object EditDonasi: Screen(route = "edit_donasi/{donasiId}"){
+        fun createRoute(donasiId: String): String = "edit_donasi/$donasiId"
+    }
+
 
     object Login : Screen(route = "login")
 
     object Register : Screen(route = "register")
 
-    object CreateNotes : Screen(route = "create_notes")
+    object FormInputDonasi : Screen(route = "form_input_donasi")
 
     object SplashScreen : Screen(route = "splash")
 

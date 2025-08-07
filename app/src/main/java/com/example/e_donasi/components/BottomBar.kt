@@ -6,13 +6,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person3
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,25 +40,26 @@ data class BottomNavItem(
  */
 @Composable
 fun BottomBar(navController: NavHostController, modifier: Modifier = Modifier) {
-    // Mendapatkan route halaman yang sedang aktif
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    // Daftar item menu yang tersedia di navigasi bawah
     val itemsMenu = listOf(
         BottomNavItem(Screen.Home.route) {
             Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
+        },
+        BottomNavItem(Screen.Profile.route) {
+            Icon(imageVector = Icons.Default.Person3, contentDescription = "Profile")
+
         }
+
     )
 
-    // Tampilan dasar background BottomBar
     Surface(
         tonalElevation = 4.dp,
-        color = Color.White,
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
         modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
     ) {
-        // Susunan horizontal item menu
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -103,7 +103,8 @@ fun BottomBarItem(
         label = "textSize"
     )
 
-    val iconColor = if (isSelected) Color(0xFF27548A) else Color.Gray
+    val iconColor =
+        if (isSelected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.secondaryContainer
 
     // Tampilan satu item navigasi
     Column(

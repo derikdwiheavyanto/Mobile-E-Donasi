@@ -1,9 +1,7 @@
 package com.example.e_donasi.service
 
-import com.example.e_donasi.model.request.LoginRequest
-import com.example.e_donasi.model.request.RegisterRequest
-import com.example.e_donasi.model.response.LoginResponse
-import com.example.e_donasi.model.response.RegisterResponse
+import com.example.e_donasi.model.response.auth.LoginResponse
+import com.example.e_donasi.model.response.auth.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.*
 

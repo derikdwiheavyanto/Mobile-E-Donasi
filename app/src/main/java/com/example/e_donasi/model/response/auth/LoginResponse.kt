@@ -1,4 +1,4 @@
-package com.example.e_donasi.model.response
+package com.example.e_donasi.model.response.auth
 
 
 data class LoginResponse(

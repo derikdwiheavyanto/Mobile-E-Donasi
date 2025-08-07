@@ -45,12 +45,22 @@ dependencies {
     //Navigation
     implementation(libs.androidx.navigation.compose)
 
+    implementation(libs.material3)
+    implementation(libs.coil.compose)
+    implementation(libs.core)
+    implementation(libs.imagepicker)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0") // versi terbaru per Agustus 2025
+
+
+
+
     // Retrofit + Gson + Coroutine (For API)
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.kotlinx.coroutines.android)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.datastore.preferences)
+
 
 
     implementation(libs.androidx.core.ktx)

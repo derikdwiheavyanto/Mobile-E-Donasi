@@ -2,6 +2,7 @@ package com.example.e_donasi.service.client
 
 import com.example.e_donasi.service.AdminService
 import com.example.e_donasi.service.AuthService
+import com.example.e_donasi.service.PengurusService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -22,6 +23,10 @@ object ApiClient {
 
     val adminService: AdminService by lazy {
         retrofit.create(AdminService::class.java)
+    }
+
+    val pengurusService: PengurusService by lazy {
+        retrofit.create(PengurusService::class.java)
     }
 
 

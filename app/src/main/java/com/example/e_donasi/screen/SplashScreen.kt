@@ -45,16 +45,16 @@ fun SplashScreen(navController: NavHostController) {
         )
         delay(2000)
 
-//        val token = PrefrenceManager.getToken(context)
-//        if (!token.isNullOrEmpty()) {
-//            navController.navigate(Screen.Home.route) {
-//                popUpTo(Screen.SplashScreen.route) { inclusive = true }
-//            }
-//        } else {
+        val token = PrefrenceManager.getToken(context)
+        if (!token.isNullOrEmpty()) {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.SplashScreen.route) { inclusive = true }
+            }
+        } else {
             navController.navigate(Screen.Login.route) {
                 popUpTo(Screen.SplashScreen.route) { inclusive = true }
             }
-//        }
+        }
     }
 
     Box(
@@ -67,7 +67,7 @@ fun SplashScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = painterResource(id = R.drawable.ic_login),
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(100.dp)
