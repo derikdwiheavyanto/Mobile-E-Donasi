@@ -25,37 +25,30 @@ import com.example.e_donasi.navigation.SetupNavGraph
  */
 @Composable
 fun MyApp(navController: NavHostController) {
-    // Mengambil entry (halaman) aktif saat ini dari backstack
     val currentBackStack by navController.currentBackStackEntryAsState()
 
-    // Mengambil route (nama halaman) dari entry aktif
     val currentRoute = currentBackStack?.destination?.route
 
-    // Menentukan apakah bottom bar perlu ditampilkan berdasarkan halaman yang sedang aktif
     val showBottomBar =  listOf(Screen.Home.route, Screen.Profile.route ).contains(currentRoute)
 
-    // Box sebagai wadah utama layout
     Box(modifier = Modifier.fillMaxSize()) {
 
-        // Scaffold menyusun struktur layout utama aplikasi (topBar, bottomBar, dan konten)
         Scaffold(
-            containerColor = Color.Transparent, // Latar belakang transparan
+            containerColor = Color.Transparent,
 
-            // Bottom bar hanya muncul di halaman Home dan Profile
             bottomBar = {
                 if (showBottomBar) {
                     BottomBar(
                         navController = navController,
                         modifier = Modifier
-                            .windowInsetsPadding(WindowInsets.navigationBars) // Beri padding agar tidak bentrok dengan sistem navigasi Android
+                            .windowInsetsPadding(WindowInsets.navigationBars)
                     )
                 }
             }
         ) { contentPadding ->
-            // Menampilkan isi halaman (konten utama) berdasarkan konfigurasi navigasi
             SetupNavGraph(
                 navController = navController,
-                modifier = Modifier.padding(contentPadding) // Menyesuaikan padding dari Scaffold
+                modifier = Modifier.padding(contentPadding)
             )
         }
     }

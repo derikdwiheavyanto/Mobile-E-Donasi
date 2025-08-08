@@ -1,17 +1,12 @@
 package com.example.e_donasi.model.viewModel
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.e_donasi.model.request.CreateDonasiRequest
 import com.example.e_donasi.model.response.donasi.DataDonation
-import com.example.e_donasi.service.PengurusService
 import com.example.e_donasi.service.client.ApiClient
 import com.example.e_donasi.utils.ErrorHelper
-import com.example.e_donasi.utils.PrefrenceManager
 import com.example.e_donasi.utils.formatBearerToken
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

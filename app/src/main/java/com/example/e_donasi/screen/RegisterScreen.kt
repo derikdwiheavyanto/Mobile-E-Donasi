@@ -96,7 +96,6 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Full name
         OutlinedTextField(
             value = name,
             onValueChange = {
@@ -119,7 +118,6 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Username
         OutlinedTextField(
             value = username,
             onValueChange = {
@@ -142,11 +140,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Email
-
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Password
         OutlinedTextField(
             value = password,
             onValueChange = {

@@ -1,6 +1,5 @@
 package com.example.e_donasi.navigation
 
-import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,21 +27,18 @@ import com.example.e_donasi.screen.pengurus.ProfileScreen
 fun SetupNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SplashScreen.route, // Halaman pertama saat aplikasi dijalankan
+        startDestination = Screen.SplashScreen.route,
         modifier = modifier
     ) {
-        // Rute ke halaman Home
         composable(route = Screen.Home.route) {
             HomeScreen(navController)
         }
 
 
-        // Rute ke halaman Login
         composable(route = Screen.Login.route) {
             LoginScreen(navController)
         }
 
-        // Rute ke halaman Register
         composable(route = Screen.Register.route) {
             RegisterScreen(navController)
         }

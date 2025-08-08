@@ -1,7 +1,6 @@
 package com.example.e_donasi.screen.pengurus
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +14,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -134,41 +132,41 @@ fun DetailDonasiScreen(
                         }
 
                         // Informasi dalam Card
-                        androidx.compose.material3.Card(
+                        Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp),
-                            elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)
+                            elevation = CardDefaults.cardElevation(4.dp)
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
                                     text = "Tanggal Donasi",
-                                    style = androidx.compose.material3.MaterialTheme.typography.labelMedium
+                                    style = MaterialTheme.typography.labelMedium
                                 )
                                 Text(
                                     text = formatToIndonesian(item.tanggalDonasi ?: "-"),
-                                    style = androidx.compose.material3.MaterialTheme.typography.titleMedium
+                                    style = MaterialTheme.typography.titleMedium
                                 )
 
                                 Spacer(modifier = Modifier.height(12.dp))
 
                                 Text(
                                     text = "Nominal",
-                                    style = androidx.compose.material3.MaterialTheme.typography.labelMedium
+                                    style = MaterialTheme.typography.labelMedium
                                 )
                                 Text(
                                     text = "Rp${item.nominal ?: 0}",
-                                    style = androidx.compose.material3.MaterialTheme.typography.titleMedium
+                                    style = MaterialTheme.typography.titleMedium
                                 )
 
                                 Spacer(modifier = Modifier.height(12.dp))
 
                                 Text(
                                     text = "Deskripsi",
-                                    style = androidx.compose.material3.MaterialTheme.typography.labelMedium
+                                    style = MaterialTheme.typography.labelMedium
                                 )
                                 Text(
                                     text = item.deskripsi ?: "-",
-                                    style = androidx.compose.material3.MaterialTheme.typography.bodyLarge
+                                    style = MaterialTheme.typography.bodyLarge
                                 )
                             }
                         }
