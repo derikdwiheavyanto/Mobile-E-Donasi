@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,7 +39,10 @@ import androidx.navigation.NavController
 import com.example.e_donasi.model.viewModel.PengurusViewModel
 import com.example.e_donasi.utils.PrefrenceManager
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -62,6 +66,8 @@ fun DetailDonasiScreen(
     val isLoading by viewModel.isLoading.collectAsState()
 
     val deleteLoading by viewModel.deleteLoading.collectAsState()
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
 
     val messageSuccess by viewModel.messageSuccesss.collectAsState()
 
@@ -186,10 +192,7 @@ fun DetailDonasiScreen(
                             Button(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    coroutinScope.launch {
-                                        val token = PrefrenceManager.getToken(context) ?: ""
-                                        viewModel.deleteDonasi(token, item.id ?: "")
-                                    }
+                                    showDeleteDialog = true
                                 },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                             ) {
@@ -197,7 +200,35 @@ fun DetailDonasiScreen(
                             }
                         }
                     }
+                    if (showDeleteDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showDeleteDialog = false },
+                            title = { Text("Konfirmasi Hapus") },
+                            text = { Text("Apakah kamu yakin ingin menghapus donasi ini?") },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDeleteDialog = false
+                                        coroutinScope.launch {
+                                            val token = PrefrenceManager.getToken(context) ?: ""
+                                            viewModel.deleteDonasi(token, item.id ?: "")
+                                        }
+                                    }
+                                ) {
+                                    Text("Ya, Hapus")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = { showDeleteDialog = false }
+                                ) {
+                                    Text("Batal")
+                                }
+                            }
+                        )
+                    }
                 }
+
                 else -> {
                     Text(
                         text = "Data donasi tidak ditemukan.",
@@ -207,6 +238,10 @@ fun DetailDonasiScreen(
 
 
             }
+
+
+
+
             if (deleteLoading) {
                 AlertDialog(
                     onDismissRequest = {},

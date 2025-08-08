@@ -13,11 +13,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,54 +56,83 @@ fun ProfileScreen(navController: NavController) {
 
     var userFullname by remember { mutableStateOf<String?>(null) }
 
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
+
     // Ambil user ID dari Preference
     LaunchedEffect(Unit) {
         userFullname = PrefrenceManager.getUserFullname(context)
     }
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_login),
-            contentDescription = "Avatar",
+    Scaffold { padding ->
+        Column(
             modifier = Modifier
-                .size(100.dp)
-                .padding(bottom = 16.dp)
-        )
-
-        Text(
-            text = "Name : ${userFullname ?: "Tidak ditemukan"}",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Button(
-            onClick = {
-               coroutineScope.launch {
-                   PrefrenceManager.clearAllPreference(context)
-
-                   navController.navigate(Screen.Login.route){
-                       popUpTo(0){inclusive = true}
-                   }
-
-               }
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Icon(Icons.Default.Logout, contentDescription = "Logout", tint = Color.White)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Logout", color = Color.White)
+            Image(
+                painter = painterResource(id = R.drawable.ic_login),
+                contentDescription = "Avatar",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(bottom = 16.dp)
+            )
+
+            Text(
+                text = "Name : ${userFullname ?: "Tidak ditemukan"}",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Button(
+                onClick = { showLogoutDialog = true },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Icon(Icons.Default.Logout, contentDescription = "Logout", tint = Color.White)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Logout", color = Color.White)
+            }
+
+            if (showLogoutDialog) {
+                AlertDialog(
+                    onDismissRequest = { showLogoutDialog = false },
+                    title = { Text("Konfirmasi Logout") },
+                    text = { Text("Apakah kamu yakin ingin logout?") },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                showLogoutDialog = false
+                                coroutineScope.launch {
+                                    PrefrenceManager.clearAllPreference(context)
+                                    navController.navigate(Screen.Login.route) {
+                                        popUpTo(0) { inclusive = true }
+                                    }
+                                }
+                            }
+                        ) {
+                            Text("Ya, Logout")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showLogoutDialog = false }
+                        ) {
+                            Text("Batal")
+                        }
+                    }
+                )
+            }
+
         }
+
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun PrfileScreenView() {

@@ -56,201 +56,205 @@ fun LoginScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    Column(
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF6FDFB))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Image(
-            painter = painterResource(id = R.drawable.ic_login),
-            contentDescription = "Ilustrasi Login",
-            contentScale = ContentScale.Crop,
+            .background(MaterialTheme.colorScheme.background)
+    ){ padding ->
+        Column(
             modifier = Modifier
-                .height(250.dp)
-                .fillMaxWidth()
-        )
+                .fillMaxSize()
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Welcome back!",
-            style = MaterialTheme.typography.headlineSmall.copy(
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF066E6D)
-            )
-        )
-        Text(
-            text = "Enter your credentials to continue.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = valueEmail,
-            onValueChange = {
-                valueEmail = it
-                emailError = false
-            },
-            isError = emailError,
-            placeholder = { Text("Username") },
-            leadingIcon = {
-                Icon(Icons.Filled.Email, contentDescription = null)
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp)
-        )
-
-        if (emailError) {
-            Text(
-                text = "Email tidak boleh kosong",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedTextField(
-            value = valuePassword,
-            onValueChange = {
-                valuePassword = it
-                passwordError = false
-            },
-            isError = passwordError,
-            placeholder = { Text("Password") },
-            leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
-            trailingIcon = {
-                val icon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = icon, contentDescription = null)
-                }
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
-        )
-
-        if (passwordError) {
-            Text(
-                text = "Password tidak boleh kosong",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Forgot Password?",
-            color = Color(0xFF066E6D),
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                focusManager.clearFocus()
-                emailError = valueEmail.isBlank()
-                passwordError = valuePassword.isBlank()
-
-                if (!emailError && !passwordError) {
-                    coroutineScope.launch {
-
-                        val loginRequest = LoginRequest(
-                            username = valueEmail,
-                            password = valuePassword
-                        )
-
-                        viewModel.login(loginRequest, context)
-                    }
-                }
-
-            },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF066E6D))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Log in", color = Color.White)
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_login),
+                contentDescription = "Ilustrasi Login",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(250.dp)
+                    .fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Welcome back!",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF066E6D)
+                )
+            )
+            Text(
+                text = "Enter your credentials to continue.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = valueEmail,
+                onValueChange = {
+                    valueEmail = it
+                    emailError = false
+                },
+                isError = emailError,
+                placeholder = { Text("Username") },
+                leadingIcon = {
+                    Icon(Icons.Filled.Email, contentDescription = null)
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onBackground
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp)
+            )
+
+            if (emailError) {
+                Text(
+                    text = "Email tidak boleh kosong",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = valuePassword,
+                onValueChange = {
+                    valuePassword = it
+                    passwordError = false
+                },
+                isError = passwordError,
+                placeholder = { Text("Password") },
+                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                trailingIcon = {
+                    val icon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = icon, contentDescription = null)
+                    }
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onBackground
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+            )
+
+            if (passwordError) {
+                Text(
+                    text = "Password tidak boleh kosong",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Forgot Password?",
+                color = Color(0xFF066E6D),
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .clickable { }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    focusManager.clearFocus()
+                    emailError = valueEmail.isBlank()
+                    passwordError = valuePassword.isBlank()
+
+                    if (!emailError && !passwordError) {
+                        coroutineScope.launch {
+
+                            val loginRequest = LoginRequest(
+                                username = valueEmail,
+                                password = valuePassword
+                            )
+
+                            viewModel.login(loginRequest, context)
+                        }
+                    }
+
+                },
+                enabled = !isLoading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF066E6D))
+            ) {
+                Text(text = "Log in", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "By logging, you are agreeing with our",
+                color = Color.Gray,
+                fontSize = 12.sp
+            )
+            Row {
+                Text(
+                    text = "Terms of Use",
+                    fontSize = 12.sp,
+                    color = Color(0xFF066E6D),
+                    modifier = Modifier.clickable { }
+                )
+                Text(text = " and ", fontSize = 12.sp, color = Color.Gray)
+                Text(
+                    text = "Privacy Policy",
+                    fontSize = 12.sp,
+                    color = Color(0xFF066E6D),
+                    modifier = Modifier.clickable { }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row {
+                Text("Don't have an account?", color = Color.Gray, fontSize = 13.sp)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "Register",
+                    color = Color(0xFF066E6D),
+                    fontSize = 13.sp,
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screen.Register.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "By logging, you are agreeing with our",
-            color = Color.Gray,
-            fontSize = 12.sp
-        )
-        Row {
-            Text(
-                text = "Terms of Use",
-                fontSize = 12.sp,
-                color = Color(0xFF066E6D),
-                modifier = Modifier.clickable { }
-            )
-            Text(text = " and ", fontSize = 12.sp, color = Color.Gray)
-            Text(
-                text = "Privacy Policy",
-                fontSize = 12.sp,
-                color = Color(0xFF066E6D),
-                modifier = Modifier.clickable { }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row {
-            Text("Don't have an account?", color = Color.Gray, fontSize = 13.sp)
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = "Register",
-                color = Color(0xFF066E6D),
-                fontSize = 13.sp,
-                modifier = Modifier.clickable {
-                    navController.navigate(Screen.Register.route) {
-                        popUpTo(Screen.Login.route) { inclusive = true }
+        if (isLoading) {
+            AlertDialog(
+                onDismissRequest = {},
+                confirmButton = {},
+                title = { Text("Loading") },
+                text = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text("Sedang login...")
                     }
                 }
             )
         }
     }
 
-    // Loading dialog
-    if (isLoading) {
-        AlertDialog(
-            onDismissRequest = {},
-            confirmButton = {},
-            title = { Text("Loading") },
-            text = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text("Sedang login...")
-                }
-            }
-        )
-    }
-
-    // Navigasi saat login sukses
     LaunchedEffect(loginSuccess) {
         if (loginSuccess) {
             val role = PrefrenceManager.getUserRole(context)
@@ -265,10 +269,9 @@ fun LoginScreen(
         }
     }
 
-    // Tampilkan pesan error
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Tunggu Kami Mengaktifkan Akun Anda", Toast.LENGTH_LONG).show()
             viewModel.resetState()
         }
     }

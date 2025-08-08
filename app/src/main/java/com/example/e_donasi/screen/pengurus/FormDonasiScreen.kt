@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -44,6 +45,9 @@ fun FormDonasiScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
+    var showDialog by remember { mutableStateOf(false) }
+
+
     // State form
     var nominal by remember { mutableStateOf("") }
     var deskripsi by remember { mutableStateOf("") }
@@ -52,7 +56,7 @@ fun FormDonasiScreen(
 
     val isLoading by pengurusViewModel.isLoading.collectAsState()
     val messageSuccess by pengurusViewModel.messageSuccesss.collectAsState()
-
+    val errorMessage by pengurusViewModel.errorMessage.collectAsState()
 
     val createDonasiSuccess by pengurusViewModel.createSuccess.collectAsState()
 
@@ -80,20 +84,28 @@ fun FormDonasiScreen(
         }
     }
 
-    LaunchedEffect(createDonasiSuccess, updateDonasiSucces, deleteDonasiSuccess) {
+    LaunchedEffect(createDonasiSuccess, updateDonasiSucces, deleteDonasiSuccess, errorMessage) {
         if (createDonasiSuccess) {
             Toast.makeText(context, messageSuccess ?: "Sukses", Toast.LENGTH_LONG).show()
             navController.popBackStack()
         }
 
-        if (updateDonasiSucces){
+        if (updateDonasiSucces) {
             Toast.makeText(context, messageSuccess ?: "Sukses", Toast.LENGTH_LONG).show()
             navController.popBackStack()
         }
 
-        if (deleteDonasiSuccess){
+        if (deleteDonasiSuccess) {
             Toast.makeText(context, messageSuccess ?: "Sukses", Toast.LENGTH_LONG).show()
             navController.popBackStack()
+        }
+
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            pengurusViewModel.resetDetailState()
+            pengurusViewModel.resetCreateState()
+            pengurusViewModel.resetUpdateState()
+            pengurusViewModel.resetDeleteState()
         }
     }
 
@@ -119,57 +131,46 @@ fun FormDonasiScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            OutlinedTextField(
-                value = nominal,
-                onValueChange = { nominal = it },
-                label = { Text("Nominal") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = deskripsi,
-                onValueChange = { deskripsi = it },
-                label = { Text("Deskripsi") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    ImagePicker.with(context as Activity)
-                        .crop()
-                        .compress(1024)
-                        .galleryOnly()
-                        .createIntent { intent -> launcher.launch(intent) }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Pilih Gambar")
-            }
-
-            selectedImageUri?.let { uri ->
-                Spacer(modifier = Modifier.height(8.dp))
-                AsyncImage(
-                    model = uri,
-                    contentDescription = "Preview Gambar",
-                    modifier = Modifier
-                        .height(200.dp)
-                        .fillMaxWidth()
+            item {
+                OutlinedTextField(
+                    value = nominal,
+                    onValueChange = { nominal = it },
+                    label = { Text("Nominal") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
                 )
-            }
 
-            oldImage?.let { uri ->
-                if (selectedImageUri == null){
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = deskripsi,
+                    onValueChange = { deskripsi = it },
+                    label = { Text("Deskripsi") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        ImagePicker.with(context as Activity)
+                            .crop()
+                            .compress(1024)
+                            .galleryOnly()
+                            .createIntent { intent -> launcher.launch(intent) }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Pilih Gambar")
+                }
+
+                selectedImageUri?.let { uri ->
                     Spacer(modifier = Modifier.height(8.dp))
                     AsyncImage(
                         model = uri,
@@ -179,77 +180,106 @@ fun FormDonasiScreen(
                             .fillMaxWidth()
                     )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                oldImage?.let { uri ->
+                    if (selectedImageUri == null) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        AsyncImage(
+                            model = uri,
+                            contentDescription = "Preview Gambar",
+                            modifier = Modifier
+                                .height(200.dp)
+                                .fillMaxWidth()
+                        )
+                    }
+                }
 
-            Button(
-                onClick = {
-                    coroutineScope.launch {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
                         if (nominal.isBlank() || deskripsi.isBlank()) {
                             Toast.makeText(context, "Mohon isi semua data!", Toast.LENGTH_SHORT).show()
-                            return@launch
+                            return@Button
                         }
 
-                        val file = selectedImageUri?.let { uri ->
-                            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-                            val tempFile = File.createTempFile("upload", ".jpg", context.cacheDir)
-                            inputStream?.use { input ->
-                                FileOutputStream(tempFile).use { output ->
-                                    input.copyTo(output)
-                                }
-                            }
-                            tempFile
-                        }
+                        showDialog = true // Tampilkan konfirmasi
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(if (donasiId == null) "Kirim Donasi" else "Update Donasi")
+                }
+            }
 
-                        val token = PrefrenceManager.getToken(context)
+        }
 
-                        if (donasiId == null) {
-                            // CREATE
-                            if (file == null) {
-                                Toast.makeText(context, "Pilih gambar!", Toast.LENGTH_SHORT).show()
-                                return@launch
-                            }
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = {
+                    Text(text = if (donasiId == null) "Konfirmasi Kirim" else "Konfirmasi Update")
+                },
+                text = {
+                    Text(text = "Apakah kamu yakin ingin ${if (donasiId == null) "mengirim" else "mengupdate"} donasi ini?")
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showDialog = false
 
-                            val request = CreateDonasiRequest(
-                                nominal = nominal.toInt(),
-                                deskripsi = deskripsi,
-                                gambar = file
-                            )
-                            pengurusViewModel.createDonasi(token, request)
-                        } else {
-
-                            val file = selectedImageUri?.let { uri ->
-                                val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-                                val tempFile = File.createTempFile("upload", ".jpg", context.cacheDir)
-                                inputStream?.use { input ->
-                                    FileOutputStream(tempFile).use { output ->
-                                        input.copyTo(output)
+                            coroutineScope.launch {
+                                val file = selectedImageUri?.let { uri ->
+                                    val inputStream: InputStream? =
+                                        context.contentResolver.openInputStream(uri)
+                                    val tempFile =
+                                        File.createTempFile("upload", ".jpg", context.cacheDir)
+                                    inputStream?.use { input ->
+                                        FileOutputStream(tempFile).use { output ->
+                                            input.copyTo(output)
+                                        }
                                     }
+                                    tempFile
                                 }
-                                tempFile
+
+                                val token = PrefrenceManager.getToken(context)
+
+                                if (donasiId == null) {
+                                    if (file == null) {
+                                        Toast.makeText(context, "Pilih gambar!", Toast.LENGTH_SHORT)
+                                            .show()
+                                        return@launch
+                                    }
+
+                                    val request = CreateDonasiRequest(
+                                        nominal = nominal.toInt(),
+                                        deskripsi = deskripsi,
+                                        gambar = file
+                                    )
+                                    pengurusViewModel.createDonasi(token, request)
+                                } else {
+                                    val request = CreateDonasiRequest(
+                                        nominal = nominal.toInt(),
+                                        deskripsi = deskripsi,
+                                        gambar = file
+                                    )
+                                    pengurusViewModel.updateDonasi(
+                                        token = token ?: "",
+                                        id = donasiId,
+                                        donasiRequest = request
+                                    )
+                                }
                             }
-
-                            val donasiRequest = CreateDonasiRequest(
-                                nominal = nominal.toInt(),
-                                deskripsi = deskripsi,
-                                gambar = file
-
-                            )
-
-                            // UPDATE
-                            pengurusViewModel.updateDonasi(
-                                token = token?: "",
-                                id = donasiId,
-                                donasiRequest = donasiRequest,
-                            )
                         }
+                    ) {
+                        Text("Ya")
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(if (donasiId == null) "Kirim Donasi" else "Update Donasi")
-            }
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Batal")
+                    }
+                }
+            )
         }
 
         if (isLoading) {
@@ -268,7 +298,6 @@ fun FormDonasiScreen(
         }
     }
 }
-
 
 
 @Preview(showBackground = true)

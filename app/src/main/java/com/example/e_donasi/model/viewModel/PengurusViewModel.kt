@@ -131,6 +131,10 @@ class PengurusViewModel : ViewModel() {
         }
     }
 
+    fun resetCreateState() {
+        _createSuccess.value = false
+        _messageSuccess.value = null
+    }
 
     fun getDetailDonasi(token: String, id: String) {
         viewModelScope.launch {
@@ -157,6 +161,10 @@ class PengurusViewModel : ViewModel() {
                 _isLoading.value = false
             }
         }
+    }
+
+    fun resetDetailState() {
+        _errorMessage.value = null
     }
 
     fun updateDonasi(token: String, id: String, donasiRequest: CreateDonasiRequest) {
@@ -207,6 +215,11 @@ class PengurusViewModel : ViewModel() {
         }
     }
 
+    fun resetUpdateState() {
+        _updateSuccess.value = false
+        _messageSuccess.value = null
+    }
+
     fun deleteDonasi(token: String?, id: String) {
         _deleteLoading.value = true
         viewModelScope.launch {
@@ -232,6 +245,11 @@ class PengurusViewModel : ViewModel() {
                 _deleteLoading.value = false
             }
         }
+    }
+
+    fun resetDeleteState() {
+        _deleteSuccess.value = false
+        _messageSuccess.value = null
     }
 
     fun resetState() {

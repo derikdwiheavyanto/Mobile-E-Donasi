@@ -63,7 +63,7 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF6FDFB))
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState) // ✅ scrollable
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -111,8 +111,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedTextColor = MaterialTheme.colorScheme.onBackground
             )
         )
         if (nameError) Text("Name is required", color = Color.Red, fontSize = 12.sp)
@@ -134,8 +134,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedTextColor = MaterialTheme.colorScheme.onBackground
             )
         )
         if (usernameError) Text("Username is required", color = Color.Red, fontSize = 12.sp)
@@ -168,8 +168,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
             shape = RoundedCornerShape(10.dp),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedTextColor = MaterialTheme.colorScheme.onBackground
             )
         )
         if (passwordError) Text("Password is required", color = Color.Red, fontSize = 12.sp)
@@ -198,8 +198,8 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
             shape = RoundedCornerShape(10.dp),
             visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedTextColor = MaterialTheme.colorScheme.onBackground
             )
         )
         if (confirmPasswordError) Text("Password does not match", color = Color.Red, fontSize = 12.sp)
@@ -213,7 +213,7 @@ fun RegisterScreen(navController: NavHostController, viewModel: AuthViewModel = 
                 nameError = name.isBlank()
                 usernameError = username.isBlank()
                 passwordError = password.isBlank()
-                confirmPasswordError = confirmPassword != password && confirmPassword.isBlank()
+                confirmPasswordError = confirmPassword != password || confirmPassword.isBlank()
 
                 if (!nameError && !usernameError && !passwordError && !confirmPasswordError) {
 
