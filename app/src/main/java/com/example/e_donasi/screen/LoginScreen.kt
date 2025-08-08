@@ -271,7 +271,7 @@ fun LoginScreen(
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
-            Toast.makeText(context, "Tunggu Kami Mengaktifkan Akun Anda", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
             viewModel.resetState()
         }
     }
