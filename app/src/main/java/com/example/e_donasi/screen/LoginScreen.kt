@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import com.example.e_donasi.R
 import com.example.e_donasi.model.viewModel.AuthViewModel
 import com.example.e_donasi.utils.PrefrenceManager
+import com.example.e_donasi.utils.checkUserRole
 
 
 @Composable
@@ -259,9 +260,15 @@ fun LoginScreen(
         if (loginSuccess) {
             val role = PrefrenceManager.getUserRole(context)
 
-            if (role == "pengurus"){
+            if (checkUserRole(role,"pengurus")){
                 navController.navigate(Screen.Home.route) {
                     popUpTo(Screen.Login.route) { inclusive = true }
+                }
+            }
+
+            if (checkUserRole(role,"admin")){
+                navController.navigate(Screen.HomeAdmin.route) {
+                    popUpTo(Screen.HomeAdmin.route) { inclusive = true }
                 }
             }
 

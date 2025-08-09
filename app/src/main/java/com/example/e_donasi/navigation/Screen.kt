@@ -8,16 +8,6 @@ sealed class Screen(val route: String) {
 
     object Home : Screen(route = "home")
 
-
-    object Result : Screen(route = "result/{text}") {
-
-
-        fun passText(text: String): String {
-            return "result/$text"
-        }
-    }
-
-
     object Profile : Screen(route = "profile")
 
     object DetailDonasi : Screen(route = "detail_donasi/{donasiId}") {
@@ -31,12 +21,16 @@ sealed class Screen(val route: String) {
         fun createRoute(donasiId: String): String = "edit_donasi/$donasiId"
     }
 
+    object FormInputDonasi : Screen(route = "form_input_donasi")
+
+
+    object  HomeAdmin : Screen(route = "home_admin")
+
 
     object Login : Screen(route = "login")
 
     object Register : Screen(route = "register")
 
-    object FormInputDonasi : Screen(route = "form_input_donasi")
 
     object SplashScreen : Screen(route = "splash")
 

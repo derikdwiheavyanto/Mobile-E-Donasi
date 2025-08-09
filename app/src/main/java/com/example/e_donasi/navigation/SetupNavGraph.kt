@@ -12,6 +12,7 @@ import com.example.e_donasi.screen.HomeScreen
 import com.example.e_donasi.screen.LoginScreen
 import com.example.e_donasi.screen.RegisterScreen
 import com.example.e_donasi.screen.SplashScreen
+import com.example.e_donasi.screen.admin.AdminUserPengurusScreen
 import com.example.e_donasi.screen.pengurus.DetailDonasiScreen
 import com.example.e_donasi.screen.pengurus.FormDonasiScreen
 import com.example.e_donasi.screen.pengurus.ProfileScreen
@@ -33,7 +34,6 @@ fun SetupNavGraph(navController: NavHostController, modifier: Modifier = Modifie
         composable(route = Screen.Home.route) {
             HomeScreen(navController)
         }
-
 
         composable(route = Screen.Login.route) {
             LoginScreen(navController)
@@ -77,6 +77,12 @@ fun SetupNavGraph(navController: NavHostController, modifier: Modifier = Modifie
             } else {
                 Text("Donasi ID tidak ditemukan")
             }
+        }
+
+        composable(
+            route = Screen.HomeAdmin.route
+        ) {
+            AdminUserPengurusScreen(navController = navController)
         }
     }
 }

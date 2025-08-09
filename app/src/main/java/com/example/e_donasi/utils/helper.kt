@@ -23,3 +23,11 @@ fun formatToIndonesian(dateString: String): String {
         dateString
     }
 }
+
+fun checkUserRole(userRole: String?, excpetedRole : String): Boolean {
+    if (userRole == excpetedRole){
+        return true
+    }
+
+    return false
+}

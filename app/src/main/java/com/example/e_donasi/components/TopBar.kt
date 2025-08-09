@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TopBarComponent(
     title: String,
-    navigationIcon: (@Composable (() -> Unit))? = null
+    navigationIcon: (@Composable (() -> Unit))? = null,
+    actions: (@Composable (() -> Unit))? = null
 ) {
     TopAppBar(
         title = {
@@ -28,6 +29,10 @@ fun TopBarComponent(
         navigationIcon = {
             navigationIcon?.invoke()
         },
+        actions = {
+            actions?.invoke()
+        },
+
     )
 }
 @Preview

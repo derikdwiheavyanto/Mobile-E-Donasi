@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import com.example.e_donasi.R
 import com.example.e_donasi.navigation.Screen
 import com.example.e_donasi.utils.PrefrenceManager
+import com.example.e_donasi.utils.checkUserRole
 import kotlinx.coroutines.delay
 
 
@@ -63,9 +64,19 @@ fun SplashScreen(navController: NavHostController) {
         delay(1000)
         val token = PrefrenceManager.getToken(context)
         if (!token.isNullOrEmpty()) {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.SplashScreen.route) { inclusive = true }
+            val userRole = PrefrenceManager.getUserRole(context)
+            if (checkUserRole(userRole, "pengurus")){
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.SplashScreen.route) { inclusive = true }
+                }
             }
+
+            if (checkUserRole(userRole, "admin")){
+                navController.navigate(Screen.HomeAdmin.route) {
+                    popUpTo(Screen.SplashScreen.route) { inclusive = true }
+                }
+            }
+
         } else {
             navController.navigate(Screen.Login.route) {
                 popUpTo(Screen.SplashScreen.route) { inclusive = true }

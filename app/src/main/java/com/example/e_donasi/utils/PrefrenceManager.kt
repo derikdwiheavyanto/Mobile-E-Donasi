@@ -51,8 +51,6 @@ object PrefrenceManager {
         context.dataStore.edit { prefs -> prefs[USER_FULLNAME_KEY] = fullname }
     }
 
-
-
     suspend fun getUserFullname(context: Context): String? {
         val prefs = context.dataStore.data.first()
         return prefs[USER_FULLNAME_KEY]
